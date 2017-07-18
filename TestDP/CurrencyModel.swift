@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct CurrencyListModel {
+struct CurrencyModel {
     let name: String
 }

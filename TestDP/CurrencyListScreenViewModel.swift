@@ -9,14 +9,14 @@
 import UIKit
 
 protocol CurrencyListScreenViewModelProtocol : class {
-    func didSelectRow(_ indexPath: IndexPath, with model: CurrencyListModel)
+    func didSelectRow(_ indexPath: IndexPath, with model: CurrencyModel)
     func reloadTableView()
 }
 
 final class CurrencyListScreenViewModel : NSObject {
 
-    fileprivate var models = [CurrencyListModel]()
-    fileprivate var showedModels = [CurrencyListModel]()
+    fileprivate var models = [CurrencyModel]()
+    fileprivate var showedModels = [CurrencyModel]()
 
     let cellReuseIdentifier = "CurrencyListCell"
     weak var delegate: CurrencyListScreenViewModelProtocol?
