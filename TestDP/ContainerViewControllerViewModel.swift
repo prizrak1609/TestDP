@@ -10,18 +10,27 @@ import UIKit
 
 protocol ContainerViewControllerViewModelProtocol : class {
     func reloadTableView()
+    func error(text: String)
 }
 
 final class ContainerViewControllerViewModel : NSObject {
     fileprivate var models = [CurrencyInfoModel]()
+    fileprivate let server = Server()
 
     let cellReuseIdentifier = "CurrencyInfoCell"
     weak var delegate: ContainerViewControllerViewModelProtocol?
 
-    func loadInfo(using model: CurrencyModel?) {
+    func loadInfo(model: CurrencyModel?) {
         guard let model = model else { return }
-        // TODO: load info from server
-        delegate?.reloadTableView()
+        server.getRateInfo(rate: model) { [weak self] result in
+            guard let welf = self else { return }
+            switch result {
+                case .error(let text): welf.delegate?.error(text: text)
+                case .success(let models):
+                    welf.models = models
+                    welf.delegate?.reloadTableView()
+            }
+        }
     }
 }
 

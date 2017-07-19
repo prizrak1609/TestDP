@@ -11,19 +11,29 @@ import UIKit
 protocol CurrencyListScreenViewModelProtocol : class {
     func didSelectRow(_ indexPath: IndexPath, with model: CurrencyModel)
     func reloadTableView()
+    func error(text: String)
 }
 
 final class CurrencyListScreenViewModel : NSObject {
 
     fileprivate var models = [CurrencyModel]()
     fileprivate var showedModels = [CurrencyModel]()
+    fileprivate let server = Server()
 
     let cellReuseIdentifier = "CurrencyListCell"
     weak var delegate: CurrencyListScreenViewModelProtocol?
 
     func loadData() {
-        // TODO: load models from server
-        delegate?.reloadTableView()
+        server.getRates { [weak self] result in
+            guard let welf = self else { return }
+            switch result {
+                case .error(let text): welf.delegate?.error(text: text)
+                case .success(let models):
+                    welf.models = models
+                    welf.showedModels = models
+                    welf.delegate?.reloadTableView()
+            }
+        }
     }
 }
 
@@ -52,7 +62,7 @@ extension CurrencyListScreenViewModel : UISearchBarDelegate {
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchText.isEmpty {
-            showedModels = models.filter { $0.name.contains(searchText) }
+            showedModels = models.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         } else {
             showedModels = models
         }

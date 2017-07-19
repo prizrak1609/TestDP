@@ -8,9 +8,23 @@
 
 import UIKit
 
+protocol CurrencyExchangeScreenViewModelProtocol : class {
+    func error(text: String)
+}
+
 final class CurrencyExchangeScreenViewModel {
 
-    func loadInfo(completion: ([CurrencyModel]) -> Void) {
-        // TODO: load all currencies and send it to completion
+    fileprivate let server = Server()
+
+    weak var delegate: CurrencyExchangeScreenViewModelProtocol?
+
+    func loadInfo(completion: @escaping ([CurrencyModel]) -> Void) {
+        server.getRates { [weak self] result in
+            guard let welf = self else { return }
+            switch result {
+                case .error(let text): welf.delegate?.error(text: text)
+                case .success(let models): completion(models)
+            }
+        }
     }
 }

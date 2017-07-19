@@ -19,7 +19,11 @@ final class ContainerViewController: UIViewController {
         super.viewDidLoad()
         initTableView()
         initViewModel()
-        viewModel.loadInfo(using: model)
+        reloadInfo()
+    }
+
+    func reloadInfo() {
+        viewModel.loadInfo(model: model)
     }
 }
 
@@ -38,5 +42,9 @@ extension ContainerViewController : ContainerViewControllerViewModelProtocol {
 
     func reloadTableView() {
         tableView.reloadData()
+    }
+
+    func error(text: String) {
+        showText(text)
     }
 }

@@ -12,10 +12,12 @@ final class CurrencyListScreen: UITableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
 
     fileprivate let viewModel = CurrencyListScreenViewModel()
+//    fileprivate let searchBar = UISearchBar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         initTableView()
+        initSearchBar()
         initViewModel()
         viewModel.loadData()
     }
@@ -26,6 +28,7 @@ extension CurrencyListScreen {
         tableView.register(UINib(nibName: viewModel.cellReuseIdentifier, bundle: nil), forCellReuseIdentifier: viewModel.cellReuseIdentifier)
         tableView.delegate = viewModel
         tableView.dataSource = viewModel
+//        tableView.tableHeaderView = searchBar
     }
 
     func initSearchBar() {
@@ -50,5 +53,9 @@ extension CurrencyListScreen : CurrencyListScreenViewModelProtocol {
 
     func reloadTableView() {
         tableView.reloadData()
+    }
+
+    func error(text: String) {
+        showText(text)
     }
 }
