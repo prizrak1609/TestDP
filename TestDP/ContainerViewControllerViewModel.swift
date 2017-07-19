@@ -20,9 +20,9 @@ final class ContainerViewControllerViewModel : NSObject {
     let cellReuseIdentifier = "CurrencyInfoCell"
     weak var delegate: ContainerViewControllerViewModelProtocol?
 
-    func loadInfo(model: CurrencyModel?) {
+    func loadInfo(cached: Bool = true, model: CurrencyModel?) {
         guard let model = model else { return }
-        server.getRateInfo(rate: model) { [weak self] result in
+        server.getRateInfo(cached: cached, rate: model) { [weak self] result in
             guard let welf = self else { return }
             switch result {
                 case .error(let text): welf.delegate?.error(text: text)

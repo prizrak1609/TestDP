@@ -38,12 +38,11 @@ final class CurrencyExchangeScreen: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == segueIdentifier,
-            childViewController == nil,
             let containerVC = segue.destination as? ContainerViewController {
 
             childViewController = containerVC
+            containerVC.model = model
         }
-        childViewController?.model = model
     }
 }
 
