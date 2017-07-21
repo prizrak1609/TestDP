@@ -23,12 +23,12 @@ final class ContainerViewController: UIViewController {
         reloadInfo()
     }
 
-    func reloadInfo() {
-        viewModel.loadInfo(model: model)
+    func reloadInfo(cached: Bool = true) {
+        viewModel.loadInfo(cached: cached, model: model)
     }
 
     func reloadInfoWithoutCache() {
-        viewModel.loadInfo(cached: false, model: model)
+        reloadInfo(cached: false)
         refreshControll.endRefreshing()
     }
 }

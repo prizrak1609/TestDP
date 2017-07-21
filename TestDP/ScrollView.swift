@@ -9,45 +9,51 @@
 import UIKit
 
 protocol ScrollViewDelegate : class {
-    func scrollViewSelected(model: CurrencyModel, in scrollView: ScrollView)
+    func scrollViewSelected(model: CurrencyModel, and view: UIView, in scrollView: ScrollView)
+}
+
+protocol ScrollViewDataSource : class {
+    func scrollViewGetViewSize(in scrollView: ScrollView) -> CGSize
+    func scrollViewGetView(from index: Int, with model: CurrencyModel, in scrollView: ScrollView) -> UIView
 }
 
 final class ScrollView: UIScrollView {
 
-    var buttonsWidth: CGFloat = 40
     weak var customDelegate: ScrollViewDelegate?
+    weak var customDataSource: ScrollViewDataSource?
 
     private var models = [CurrencyModel]()
+    private var viewSize = CGSize.zero
 
     func addModel(_ model: CurrencyModel) {
-        let buttonsSize = CGSize(width: buttonsWidth, height: bounds.height)
-        let label = UILabel(frame: CGRect(origin: CGPoint.zero, size: buttonsSize))
-        label.textAlignment = .center
-        label.text = model.name
-        addSubview(label)
+        guard let dataSource = customDataSource else { return }
+        viewSize = dataSource.scrollViewGetViewSize(in: self)
+        let view = dataSource.scrollViewGetView(from: subviews.count - 1, with: model, in: self)
         var size = contentSize
-        size.width += label.frame.width
+        size.width += viewSize.width
         contentSize = size
+        addSubview(view)
         models.append(model)
     }
 
     func addModels(_ models: [CurrencyModel]) {
-        models.forEach { addModel($0) }
+        models.forEach(addModel)
     }
 
     func scrollTo(_ model: CurrencyModel) {
         guard let index = models.index(where: { $0.name == model.name }) else { return }
-        let positionX = buttonsWidth * CGFloat(index)
+        let positionX = viewSize.width * CGFloat(index)
         let point = CGPoint(x: positionX, y: 0)
         contentOffset = point
-        customDelegate?.scrollViewSelected(model: model, in: self)
+        customDelegate?.scrollViewSelected(model: model, and: subviews[index], in: self)
     }
 
     override func layoutSubviews() {
         var point = CGPoint.zero
         for (index, view) in subviews.enumerated() {
-            point.x = view.frame.width * CGFloat(index)
+            point.x = viewSize.width * CGFloat(index)
             view.frame.origin = point
+            view.frame.size = viewSize
         }
     }
 
@@ -55,7 +61,7 @@ final class ScrollView: UIScrollView {
         super.touchesEnded(touches, with: event)
         guard let touch = Array(touches).last else { return }
         let location = touch.location(in: self)
-        let index = Int(floor(location.x / buttonsWidth))
-        customDelegate?.scrollViewSelected(model: models[index], in: self)
+        let index = Int(floor(location.x / viewSize.width))
+        customDelegate?.scrollViewSelected(model: models[index], and: subviews[index], in: self)
     }
 }

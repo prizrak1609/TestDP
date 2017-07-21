@@ -9,6 +9,8 @@
 import UIKit
 
 fileprivate let segueIdentifier = "tabInfoController"
+fileprivate let buttonsBackgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+fileprivate let selectedButtonsBackgroundColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
 
 final class CurrencyExchangeScreen: UIViewController {
     @IBOutlet fileprivate weak var tabsScrollView: ScrollView!
@@ -21,7 +23,10 @@ final class CurrencyExchangeScreen: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Currencies rate"
         tabsScrollView.customDelegate = self
+        tabsScrollView.customDataSource = self
+        tabsScrollView.backgroundColor = buttonsBackgroundColor
         viewModel.delegate = self
     }
 
@@ -53,9 +58,9 @@ extension CurrencyExchangeScreen : CurrencyExchangeScreenViewModelProtocol {
     }
 }
 
-extension CurrencyExchangeScreen : ScrollViewDelegate {
+extension CurrencyExchangeScreen : ScrollViewDelegate, ScrollViewDataSource {
 
-    func scrollViewSelected(model: CurrencyModel, in scrollView: ScrollView) {
+    func scrollViewSelected(model: CurrencyModel, and view: UIView, in scrollView: ScrollView) {
         // if remove this check and childViewController variable then
         // in runtime get error "There are unexpected subviews in the container view. Perhaps the embed segue has already fired once or a subview was added programmatically?"
         if childViewController == nil {
@@ -64,5 +69,18 @@ extension CurrencyExchangeScreen : ScrollViewDelegate {
             childViewController?.model = model
             childViewController?.reloadInfo()
         }
+        scrollView.subviews.forEach { $0.backgroundColor = buttonsBackgroundColor }
+        view.backgroundColor = selectedButtonsBackgroundColor
+    }
+
+    func scrollViewGetViewSize(in scrollView: ScrollView) -> CGSize {
+        return CGSize(width: 40, height: scrollView.bounds.height)
+    }
+
+    func scrollViewGetView(from index: Int, with model: CurrencyModel, in scrollView: ScrollView) -> UIView {
+        let label = UILabel(frame: CGRect.zero)
+        label.text = model.name
+        label.textAlignment = .center
+        return label
     }
 }
