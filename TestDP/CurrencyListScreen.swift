@@ -15,7 +15,9 @@ final class CurrencyListScreen: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Currencies"
         initTableView()
+        initSearchBar()
         initViewModel()
         viewModel.loadData()
     }
@@ -39,7 +41,7 @@ extension CurrencyListScreen : CurrencyListScreenViewModelProtocol {
         viewModel.delegate = self
     }
 
-    func didSelectRow(_ indexPath: IndexPath, with model: CurrencyListModel) {
+    func didSelectRow(_ indexPath: IndexPath, with model: CurrencyModel) {
         if let currencyExchangeScreen = Storyboards.currencyExchange as? CurrencyExchangeScreen {
             currencyExchangeScreen.model = model
             navigationController?.pushViewController(currencyExchangeScreen, animated: true)
@@ -50,5 +52,9 @@ extension CurrencyListScreen : CurrencyListScreenViewModelProtocol {
 
     func reloadTableView() {
         tableView.reloadData()
+    }
+
+    func error(text: String) {
+        showText(text)
     }
 }

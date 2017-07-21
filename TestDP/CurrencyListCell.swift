@@ -11,7 +11,7 @@ import UIKit
 final class CurrencyListCell: UITableViewCell {
     @IBOutlet fileprivate weak var nameLabel: UILabel!
 
-    var model: CurrencyListModel? {
+    var model: CurrencyModel? {
         didSet {
             guard let model = model else { return }
             nameLabel.text = model.name

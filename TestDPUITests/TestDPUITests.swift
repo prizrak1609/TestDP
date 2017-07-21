@@ -31,6 +31,27 @@ class TestDPUITests: XCTestCase {
     func testExample() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        XCTAssertTrue(true)
     }
-    
+
+    func testCurrenciesSearch() {
+        let app = XCUIApplication()
+        let tablesQuery = app.tables
+        let searchField = tablesQuery.children(matching: .searchField).element
+        searchField.tap()
+        searchField.typeText("G")
+        app.keys["b"].tap()
+        searchField.typeText("b")
+        tablesQuery.buttons["Cancel"].tap()
+    }
+
+    func testCurrenciesRateScreen() {
+        let app = XCUIApplication()
+        let tablesQuery = app.tables
+        tablesQuery.staticTexts["DKK"].tap()
+        let gbpStaticText = app.staticTexts["GBP"]
+        gbpStaticText.tap()
+        gbpStaticText.swipeRight()
+        app.staticTexts["DKK"].swipeRight()
+    }
 }

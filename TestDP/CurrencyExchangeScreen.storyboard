@@ -6,13 +6,14 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Currency Exchange Screen-->
         <scene sceneID="lKJ-ac-aZa">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="nWt-pE-MUL" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="nWt-pE-MUL" customClass="CurrencyExchangeScreen" customModule="TestDP" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6U1-G6-LY4"/>
                         <viewControllerLayoutGuide type="bottom" id="ao1-uU-mP6"/>
@@ -20,12 +21,73 @@
                     <view key="view" contentMode="scaleToFill" id="4E6-OZ-Ru0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l7J-im-g0O" customClass="ScrollView" customModule="TestDP" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="320" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Zqp-gb-kAg"/>
+                                </constraints>
+                            </scrollView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cwi-iM-1Tq">
+                                <rect key="frame" x="0.0" y="104" width="320" height="464"/>
+                                <connections>
+                                    <segue destination="imu-Ec-MJR" kind="embed" identifier="tabInfoController" id="hOK-3t-O9E"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Cwi-iM-1Tq" firstAttribute="leading" secondItem="l7J-im-g0O" secondAttribute="leading" id="LxU-h2-ikf"/>
+                            <constraint firstAttribute="trailing" secondItem="l7J-im-g0O" secondAttribute="trailing" id="NHM-YR-zTT"/>
+                            <constraint firstItem="l7J-im-g0O" firstAttribute="top" secondItem="6U1-G6-LY4" secondAttribute="bottom" id="TIa-sW-buM"/>
+                            <constraint firstItem="l7J-im-g0O" firstAttribute="leading" secondItem="4E6-OZ-Ru0" secondAttribute="leading" id="a0H-To-xM7"/>
+                            <constraint firstItem="Cwi-iM-1Tq" firstAttribute="top" secondItem="l7J-im-g0O" secondAttribute="bottom" id="csd-Bv-6bz"/>
+                            <constraint firstItem="ao1-uU-mP6" firstAttribute="top" secondItem="Cwi-iM-1Tq" secondAttribute="bottom" id="d67-g3-oH5"/>
+                            <constraint firstItem="Cwi-iM-1Tq" firstAttribute="trailing" secondItem="l7J-im-g0O" secondAttribute="trailing" id="iJe-VQ-zQe"/>
+                        </constraints>
                     </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <connections>
+                        <outlet property="containerView" destination="Cwi-iM-1Tq" id="wZO-Tr-7ic"/>
+                        <outlet property="tabsScrollView" destination="l7J-im-g0O" id="Imz-Vp-7zy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hiu-MV-JWp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="55" y="79"/>
+            <point key="canvasLocation" x="54.375" y="78.16901408450704"/>
+        </scene>
+        <!--Container View Controller-->
+        <scene sceneID="EDE-8z-MrC">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="imu-Ec-MJR" customClass="ContainerViewController" customModule="TestDP" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Kc9-Ed-wDB"/>
+                        <viewControllerLayoutGuide type="bottom" id="c2f-PS-JMT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zcf-k5-rFB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="464"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="exx-KQ-L58">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="464"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="exx-KQ-L58" secondAttribute="trailing" id="7Pp-1p-nD0"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="exx-KQ-L58" secondAttribute="bottom" id="H8Z-Tw-SLP"/>
+                            <constraint firstItem="exx-KQ-L58" firstAttribute="leading" secondItem="zcf-k5-rFB" secondAttribute="leading" id="gfZ-lU-Sw1"/>
+                            <constraint firstItem="exx-KQ-L58" firstAttribute="top" secondItem="zcf-k5-rFB" secondAttribute="topMargin" id="xCc-UK-hKH"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="exx-KQ-L58" id="efz-KO-pkg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ffp-PP-Egb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="906" y="78"/>
         </scene>
     </scenes>
 </document>
